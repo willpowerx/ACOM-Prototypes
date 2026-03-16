@@ -1,0 +1,165 @@
+/* =========================================
+   Demo Styles — Look & Feel
+   Requires: tokens.css (design tokens), grid.css (grid system)
+   ========================================= */
+
+/* --- CSS Reset --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* --- Demo Color Aliases --- */
+/* These map token values to simple demo-specific names */
+:root {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1e40af;
+    --color-text: var(--color-content-default, #171717);
+    --color-text-muted: var(--color-content-subtle, #525252);
+    --color-bg: var(--color-background-default, #ffffff);
+    --color-surface: var(--color-background-subtle, #f5f5f5);
+    --color-border: var(--color-border-subtle, #e5e5e5);
+}
+
+/* --- Base Styles --- */
+body {
+    margin: 0;
+    font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- Typographic Defaults --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    font-size: 1.75rem;
+    letter-spacing: -0.015em;
+}
+
+p {
+    margin: 0 0 1rem 0;
+}
+
+/* =========================================
+   Demo Component Styles
+   ========================================= */
+header {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+section {
+    margin-bottom: 4rem;
+}
+
+/* --- Demo Card --- */
+.demo-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 1.5rem;
+    border-radius: var(--radius-sm, 8px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: all 0.2s ease;
+}
+
+.demo-card:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: #eff6ff;
+}
+
+/* --- Button --- */
+.btn {
+    appearance: none;
+    background: var(--color-text);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: var(--font-size-sm, 0.875rem);
+}
+
+.btn:hover {
+    background: var(--color-text-muted);
+}
+
+.btn.active {
+    background: var(--color-blue-800);
+    color: #fff;
+}
+
+/* =========================================
+   Bento Card Styling (visual only)
+   ========================================= */
+.bento-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl, 24px);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.bento-card.dark {
+    background: #171717;
+    color: white;
+    border-color: #333;
+}
+
+.bento-card.highlight {
+    background: #eff6ff;
+    border-color: var(--color-primary);
+}
+
+.bento-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+}
+
+.bento-card.outline {
+    background: transparent;
+    border: 2px dashed var(--color-border);
+    color: var(--color-text-muted);
+}
+
+.bento-card.outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: #f8fafc;
+}
