@@ -1,0 +1,120 @@
+/* =========================================
+   UPS Flex Grid
+   Requires: tokens.css, grid.css
+   grid.css provides: --s2a-grid-gutter, containers, overlay
+   ========================================= */
+
+/* --- Base Grid Container --- */
+.ups-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* safe fallback if no variant class applied */
+    gap: var(--s2a-grid-gutter);
+    align-items: start;
+}
+
+/* --- Mobile default: single column stack (<768px) --- */
+.ups-grid.two-up,
+.ups-grid.three-up,
+.ups-grid.four-up,
+.ups-grid.five-up,
+.ups-grid.six-up {
+    grid-template-columns: 1fr;
+}
+
+/* --- Tablet: always 2-up (768px–1279.98px) --- */
+@media (min-width: 768px) and (max-width: 1279.98px) {
+    .ups-grid.two-up,
+    .ups-grid.three-up,
+    .ups-grid.four-up,
+    .ups-grid.five-up,
+    .ups-grid.six-up {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Orphan rule: tablet only, opt-in via .orphan-full ---
+   In a 2-col grid, odd-positioned items land in column 1.
+   A last child in an odd position is visually orphaned.
+   Even-positioned last children fill column 2 — no orphan. */
+@media (min-width: 768px) and (max-width: 1279.98px) {
+    .ups-grid.orphan-full > :last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* --- Desktop: N-up fr columns (≥1280px) --- */
+@media (min-width: 1280px) {
+    .ups-grid.two-up   { grid-template-columns: repeat(2, 1fr); }
+    .ups-grid.three-up { grid-template-columns: repeat(3, 1fr); }
+    .ups-grid.four-up  { grid-template-columns: repeat(4, 1fr); }
+    .ups-grid.five-up  { grid-template-columns: repeat(5, 1fr); }
+    .ups-grid.six-up   { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* =========================================
+   Editorial Card (.ups-card) — demo placeholder
+   ========================================= */
+.ups-card {
+    background: var(--color-background-default, #fff);
+    border: 1px solid var(--color-border-subtle, #dadada);
+    border-radius: var(--radius-sm, 8px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Image area */
+.ups-card-media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--color-background-subtle, #f3f3f3);
+    flex-shrink: 0;
+}
+
+/* Content area */
+.ups-card-body {
+    padding: var(--spacing-lg, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 8px);
+    flex: 1;
+}
+
+.ups-card-eyebrow {
+    font-size: var(--font-size-xs, 0.75rem);
+    font-weight: var(--font-weight-bold, 700);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-content-eyebrow, rgba(0,0,0,0.64));
+}
+
+.ups-card-title {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: var(--font-weight-bold, 700);
+    line-height: 1.25;
+    color: var(--color-content-default, #292929);
+    margin: 0;
+}
+
+.ups-card-body-text {
+    font-size: var(--font-size-sm, 0.875rem);
+    line-height: 1.5;
+    color: var(--color-content-subtle, #717171);
+    margin: 0;
+}
+
+.ups-card-cta {
+    margin-top: auto;
+    padding-top: var(--spacing-sm, 0.75rem);
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-content-default, #292929);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ups-card-cta::after {
+    content: '→';
+}
