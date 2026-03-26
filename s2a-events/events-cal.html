@@ -295,9 +295,7 @@
             </div>
 
             <!-- Divider between on-demand and live -->
-            <div class="live-divider" id="liveDivider">
-                <span>Dev note: Page starts on the live section</span>
-            </div>
+            <div class="live-divider" id="liveDivider"></div>
 
             <!-- LIVE NOW SECTION -->
             <div class="live-now-section" id="liveNowSection">
@@ -311,7 +309,7 @@
 
                 <div class="live-carousel">
                     <!-- Keynote card -->
-                    <div class="live-card keynote" onclick="openSessionDetail()">
+                    <div class="live-card keynote">
                         <div class="live-card-video">
                             <div class="video-bottom-bar">
                                 <div class="video-progress">
@@ -329,15 +327,15 @@
                             <p class="live-card-desc">Adobe leaders preview the latest product features and innovations
                                 that will help you bring your creative vision to life.</p>
                             <div class="live-card-actions">
-                                <a href="#" class="btn-watch" onclick="event.stopPropagation()">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <polygon points="5 3 19 12 5 21 5 3" />
+                                <a href="#" class="btn-watch" onclick="openSessionDetail()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+                                        <polygon points="6 3 20 12 6 21 6 3" />
                                     </svg>
                                     Watch now
                                 </a>
-                                <button class="btn-fav-label" onclick="event.stopPropagation(); toggleFav(this)"
+                                <button class="btn-fav-label" onclick="toggleFav(this)"
                                     aria-label="Favorite">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                         <path
                                             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                                     </svg>
@@ -348,7 +346,7 @@
                     </div>
 
                     <!-- Second live card (regular) -->
-                    <div class="live-card" onclick="openSessionDetail()">
+                    <div class="live-card">
                         <div class="live-card-video">
                             <div class="video-bottom-bar">
                                 <div class="video-progress">
@@ -366,13 +364,13 @@
                             <p class="live-card-desc">Whether you're looking to boost your creativity, uncover new
                                 techniques, or supercharge your workflow.</p>
                             <div class="live-card-actions">
-                                <a href="#" class="btn-watch" onclick="event.stopPropagation()">
+                                <a href="#" class="btn-watch" onclick="openSessionDetail()">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                         <polygon points="5 3 19 12 5 21 5 3" />
                                     </svg>
                                     Watch now
                                 </a>
-                                <button class="btn-fav" onclick="event.stopPropagation(); toggleFav(this)"
+                                <button class="btn-fav" onclick="toggleFav(this)"
                                     aria-label="Favorite">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path
@@ -384,7 +382,7 @@
                     </div>
 
                     <!-- Third live card (regular) -->
-                    <div class="live-card" onclick="openSessionDetail()">
+                    <div class="live-card">
                         <div class="live-card-video">
                             <div class="video-bottom-bar">
                                 <div class="video-progress">
@@ -402,13 +400,13 @@
                             <p class="live-card-desc">Explore the newest features across Photoshop, Illustrator, and the
                                 full Creative Cloud suite.</p>
                             <div class="live-card-actions">
-                                <a href="#" class="btn-watch" onclick="event.stopPropagation()">
+                                <a href="#" class="btn-watch" onclick="openSessionDetail()">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                         <polygon points="5 3 19 12 5 21 5 3" />
                                     </svg>
                                     Watch now
                                 </a>
-                                <button class="btn-fav" onclick="event.stopPropagation(); toggleFav(this)"
+                                <button class="btn-fav" onclick="toggleFav(this)"
                                     aria-label="Favorite">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path
@@ -590,6 +588,7 @@
                             Aliquam nunc nam hendrerit odio. Quis euismod justo ut vitae augue leo in ipsum. Et blandit urna
                             risus phasellus sollicitudin ipsum vitae.
                         </p>
+                        <div class="detail-info-row"><strong>Audience: </strong><span>General Audience</span></div>
                         <div class="detail-info-row"><strong>Industry: </strong><span>[Industry]</span></div>
                         <div class="detail-info-row"><strong>Technical level: </strong><span>General Audience</span></div>
                         <div class="detail-info-row"><strong>Track: </strong><span>Personalized Omnichannel Engagement</span></div>
@@ -848,8 +847,8 @@
                     <div class="session-card-body">
                         <div class="session-card-meta-row">
                             <span class="badge-track session-card-badge-inline">${track}</span>
+                            <div class="session-card-time">${time}</div>
                         </div>
-                        <div class="session-card-time">${time}</div>
                         <div class="session-card-title">${title}</div>
                         <div class="session-card-desc">${desc}</div>
                         <div class="session-card-speaker">John Doe</div>
@@ -972,9 +971,46 @@
                 });
             });
 
-            // Also apply to live carousel if present
+            // Also apply arrows + drag to live carousel
             const liveCarousel = document.querySelector('.live-carousel');
-            if (liveCarousel) {
+            const liveSection = document.querySelector('.live-now-section');
+            if (liveCarousel && liveSection) {
+                // Inject arrow buttons into the live-now-section
+                const liveLeftArrow = document.createElement('button');
+                liveLeftArrow.className = 'slot-scroll-arrow slot-scroll-arrow-left';
+                liveLeftArrow.setAttribute('aria-label', 'Scroll left');
+                liveLeftArrow.innerHTML = arrowSVG.left;
+
+                const liveRightArrow = document.createElement('button');
+                liveRightArrow.className = 'slot-scroll-arrow slot-scroll-arrow-right';
+                liveRightArrow.setAttribute('aria-label', 'Scroll right');
+                liveRightArrow.innerHTML = arrowSVG.right;
+
+                liveSection.appendChild(liveLeftArrow);
+                liveSection.appendChild(liveRightArrow);
+
+                // Update arrow visibility based on scroll position
+                function updateLiveArrows() {
+                    const scrollLeft = liveCarousel.scrollLeft;
+                    const maxScroll = liveCarousel.scrollWidth - liveCarousel.clientWidth;
+                    liveLeftArrow.classList.toggle('visible', scrollLeft > 8);
+                    liveRightArrow.classList.toggle('visible', scrollLeft < maxScroll - 8);
+                }
+
+                liveCarousel.addEventListener('scroll', updateLiveArrows);
+                requestAnimationFrame(updateLiveArrows);
+
+                // Arrow click handlers — scroll by ~one card width
+                liveLeftArrow.addEventListener('click', () => {
+                    const cardWidth = liveCarousel.querySelector('.live-card')?.offsetWidth || 300;
+                    liveCarousel.scrollBy({ left: -(cardWidth + 16), behavior: 'smooth' });
+                });
+                liveRightArrow.addEventListener('click', () => {
+                    const cardWidth = liveCarousel.querySelector('.live-card')?.offsetWidth || 300;
+                    liveCarousel.scrollBy({ left: cardWidth + 16, behavior: 'smooth' });
+                });
+
+                // Drag-to-scroll (mouse)
                 let isDragging = false;
                 let startX, scrollStart;
 
