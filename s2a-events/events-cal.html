@@ -251,17 +251,114 @@
                     <button class="day-tab" data-day="3" onclick="switchDay(this)">Oct 30</button>
                 </div>
                 <div class="drawer-filter-row">
-                    <button class="filter-btn" onclick="openFilterPanel()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                        </svg>
-                        Filter
-                    </button>
-                    <select class="session-dropdown" id="sessionDropdown">
-                        <option>All sessions</option>
-                        <option>My schedule</option>
-                        <option>Recommended</option>
-                    </select>
+                    <div class="session-dropdown-wrap" id="sessionDropdownWrap">
+                        <button class="session-dropdown-toggle" id="sessionDropdownToggle" onclick="toggleSessionDropdown()">
+                            <span id="sessionDropdownLabel">All sessions</span>
+                            <svg class="session-dropdown-arrow" viewBox="0 0 10 6" fill="none" width="10" height="6">
+                                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="session-dropdown-menu" id="sessionDropdownMenu">
+                            <button class="session-dropdown-option selected" onclick="selectSessionOption(this)">All sessions</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">My sessions</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Mainstage</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Generative AI</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Business</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">3D</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Branding</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Education</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Social media</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Photography</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Video</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Design &amp; Illustration</button>
+                            <button class="session-dropdown-option" onclick="selectSessionOption(this)">Content Creator</button>
+                        </div>
+                    </div>
+                    <div class="filter-mega-wrap" id="filterMegaWrap">
+                        <button class="filter-btn" onclick="toggleFilterMega()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                            </svg>
+                            Filter
+                        </button>
+                        <div class="filter-mega-menu" id="filterMegaMenu">
+                            <div class="filter-mega-sidebar">
+                                <h3 class="filter-mega-title">Filters</h3>
+                                <nav class="filter-mega-nav">
+                                    <button class="filter-mega-cat active" data-cat="type" onclick="switchFilterCat(this)">Type</button>
+                                    <button class="filter-mega-cat" data-cat="format" onclick="switchFilterCat(this)">Format</button>
+                                    <button class="filter-mega-cat" data-cat="level" onclick="switchFilterCat(this)">Technical level</button>
+                                    <button class="filter-mega-cat" data-cat="product" onclick="switchFilterCat(this)">Product</button>
+                                    <button class="filter-mega-cat" data-cat="category" onclick="switchFilterCat(this)">Category</button>
+                                    <button class="filter-mega-cat" data-cat="audience" onclick="switchFilterCat(this)">Audience</button>
+                                    <button class="filter-mega-cat" data-cat="region" onclick="switchFilterCat(this)">Region</button>
+                                </nav>
+                                <div class="filter-mega-actions">
+                                    <button class="btn-apply" onclick="toggleFilterMega()">Apply</button>
+                                    <button class="btn-reset" onclick="resetFilters()">Reset all</button>
+                                </div>
+                            </div>
+                            <div class="filter-mega-content">
+                                <div class="filter-mega-pane active" data-cat="type">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Creativity Super Session</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">First Take</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Keynote</button>
+                                        <button class="filter-chip-mega selected" onclick="toggleChip(this)">Luminary Session<svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg></button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Meet the Speaker</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Session</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Sneaks</button>
+                                    </div>
+                                </div>
+                                <div class="filter-mega-pane" data-cat="format">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Max for Speaker</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Session</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Sneaks</button>
+                                    </div>
+                                </div>
+                                <div class="filter-mega-pane" data-cat="level">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Beginner</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Intermediate</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Advanced</button>
+                                    </div>
+                                </div>
+                                <div class="filter-mega-pane" data-cat="product">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Photoshop</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Illustrator</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Premiere Pro</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">After Effects</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Firefly</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Adobe Express</button>
+                                    </div>
+                                </div>
+                                <div class="filter-mega-pane" data-cat="category">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Thought Leadership</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Best Practices</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Innovation</button>
+                                    </div>
+                                </div>
+                                <div class="filter-mega-pane" data-cat="audience">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Designer</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Photographer</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Video Editor</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Marketer</button>
+                                    </div>
+                                </div>
+                                <div class="filter-mega-pane" data-cat="region">
+                                    <div class="filter-chips-mega">
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">Americas</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">EMEA</button>
+                                        <button class="filter-chip-mega" onclick="toggleChip(this)">APAC</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -462,77 +559,7 @@
             </button>
         </div>
 
-        <!-- FILTER PANEL (slides in from right) -->
-        <div class="filter-panel" id="filterPanel">
-            <div class="filter-panel-header">
-                <h3 class="filter-panel-title">Filters</h3>
-                <button class="drawer-close" onclick="closeFilterPanel()" aria-label="Close filters">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
-            </div>
-            <div class="filter-panel-body">
-                <div class="filter-group">
-                    <div class="filter-group-label">Type</div>
-                    <div class="filter-chips">
-                        <button class="filter-chip" onclick="toggleChip(this)">Creativity Super Session</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">First Take</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Keynote</button>
-                        <button class="filter-chip selected" onclick="toggleChip(this)">Luminary Session</button>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <div class="filter-group-label">Format</div>
-                    <div class="filter-chips">
-                        <button class="filter-chip" onclick="toggleChip(this)">Max for Speaker</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Session</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Sneaks</button>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <div class="filter-group-label">Technical level</div>
-                    <div class="filter-chips">
-                        <button class="filter-chip" onclick="toggleChip(this)">Beginner</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Intermediate</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Advanced</button>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <div class="filter-group-label">Product</div>
-                    <div class="filter-chips">
-                        <button class="filter-chip" onclick="toggleChip(this)">Photoshop</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Illustrator</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Premiere Pro</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">After Effects</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Firefly</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Adobe Express</button>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <div class="filter-group-label">Audience</div>
-                    <div class="filter-chips">
-                        <button class="filter-chip" onclick="toggleChip(this)">Designer</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Photographer</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Video Editor</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">Marketer</button>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <div class="filter-group-label">Region</div>
-                    <div class="filter-chips">
-                        <button class="filter-chip" onclick="toggleChip(this)">Americas</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">EMEA</button>
-                        <button class="filter-chip" onclick="toggleChip(this)">APAC</button>
-                    </div>
-                </div>
-            </div>
-            <div class="filter-panel-footer">
-                <button class="btn-apply" onclick="closeFilterPanel()">Apply</button>
-                <button class="btn-reset" onclick="resetFilters()">Reset all</button>
-            </div>
-        </div>
+
 
         <!-- SESSION DETAIL VIEW (slides in from right) -->
         <div class="session-detail" id="sessionDetail">
@@ -1061,7 +1088,7 @@
             document.body.style.overflow = '';
             drawerOpen = false;
             // Also close sub-panels
-            closeFilterPanel();
+            closeFilterMega();
             closeSessionDetail();
         }
 
@@ -1080,22 +1107,82 @@
             });
         }
 
-        // ── Filter panel ───────────────────────────────────────
-        function openFilterPanel() {
-            document.getElementById('filterPanel').classList.add('open');
+        // ── Filter mega menu ──────────────────────────────────
+        function toggleFilterMega() {
+            const wrap = document.getElementById('filterMegaWrap');
+            wrap.classList.toggle('open');
+            // Close session dropdown if open
+            document.getElementById('sessionDropdownWrap').classList.remove('open');
         }
 
-        function closeFilterPanel() {
-            document.getElementById('filterPanel').classList.remove('open');
+        function closeFilterMega() {
+            document.getElementById('filterMegaWrap').classList.remove('open');
+        }
+
+        function switchFilterCat(btn) {
+            document.querySelectorAll('.filter-mega-cat').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            const cat = btn.dataset.cat;
+            document.querySelectorAll('.filter-mega-pane').forEach(p => p.classList.remove('active'));
+            document.querySelector(`.filter-mega-pane[data-cat="${cat}"]`).classList.add('active');
         }
 
         function toggleChip(el) {
             el.classList.toggle('selected');
+            // Toggle checkmark SVG
+            let check = el.querySelector('.chip-check');
+            if (el.classList.contains('selected') && !check) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.classList.add('chip-check');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '3');
+                svg.setAttribute('width', '14');
+                svg.setAttribute('height', '14');
+                const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+                polyline.setAttribute('points', '20 6 9 17 4 12');
+                svg.appendChild(polyline);
+                el.appendChild(svg);
+            } else if (!el.classList.contains('selected') && check) {
+                check.remove();
+            }
         }
 
         function resetFilters() {
-            document.querySelectorAll('.filter-chip.selected').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.filter-chip-mega.selected').forEach(c => {
+                c.classList.remove('selected');
+                const check = c.querySelector('.chip-check');
+                if (check) check.remove();
+            });
         }
+
+        // ── Custom session dropdown ────────────────────────────
+        function toggleSessionDropdown() {
+            document.getElementById('sessionDropdownWrap').classList.toggle('open');
+        }
+
+        function selectSessionOption(el) {
+            // Update label
+            document.getElementById('sessionDropdownLabel').textContent = el.textContent;
+            // Mark selected
+            document.querySelectorAll('.session-dropdown-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            // Close menu
+            document.getElementById('sessionDropdownWrap').classList.remove('open');
+        }
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', (e) => {
+            const sessionWrap = document.getElementById('sessionDropdownWrap');
+            if (sessionWrap && !sessionWrap.contains(e.target)) {
+                sessionWrap.classList.remove('open');
+            }
+            const filterWrap = document.getElementById('filterMegaWrap');
+            if (filterWrap && !filterWrap.contains(e.target)) {
+                filterWrap.classList.remove('open');
+            }
+        });
 
         // ── Session detail ─────────────────────────────────────
         function openSessionDetail() {
@@ -1186,8 +1273,8 @@
             if (e.key === 'Escape') {
                 if (document.getElementById('sessionDetail').classList.contains('open')) {
                     closeSessionDetail();
-                } else if (document.getElementById('filterPanel').classList.contains('open')) {
-                    closeFilterPanel();
+                } else if (document.getElementById('filterMegaWrap').classList.contains('open')) {
+                    closeFilterMega();
                 } else if (drawerOpen) {
                     closeDrawer();
                 }
