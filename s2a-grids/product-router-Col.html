@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Router — S2a Grid Example</title>
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="grid.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── Page-level dark theme ─────────────────────────── */
+        body {
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+
+        /* ── Product Card ──────────────────────────────────── */
+        .product-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+            transition: background 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            background: #222;
+        }
+
+        /* ── Icon badge ────────────────────────────────────── */
+        .product-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: auto;
+        }
+
+        .icon-firefly {
+            background: #e03c31;
+        }
+
+        .icon-acrobat {
+            background: #e03c31;
+        }
+
+        .icon-photoshop {
+            background: #31a8ff;
+        }
+
+        .icon-premiere {
+            background: #9999ff;
+        }
+
+        .icon-creative-cloud {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500, #4ecb71, #31a8ff);
+        }
+
+        .icon-genstudio {
+            background: #e03c31;
+        }
+
+        .icon-business {
+            background: #e03c31;
+        }
+
+        .icon-illustrator {
+            background: #ff9a00;
+        }
+
+        .icon-all-products {
+            background: transparent;
+        }
+
+        /* ── Card text ─────────────────────────────────────── */
+        .product-card-body {
+            margin-top: auto;
+        }
+
+        .product-card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+            line-height: 1.3;
+        }
+
+        .product-card-desc {
+            font-size: 0.75rem;
+            color: #999;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* ── Featured card with background image ───────────── */
+        .product-card--featured {
+            min-height: 220px;
+        }
+
+        .product-card--featured .product-card-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        .product-card--featured .product-card-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 60%);
+        }
+
+        .product-card--featured .product-icon,
+        .product-card--featured .product-card-body {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Arrow link for "All Products" ─────────────────── */
+        .product-card-arrow {
+            font-size: 1.25rem;
+            color: #999;
+            margin-bottom: auto;
+        }
+
+        /* ── Section header ────────────────────────────────── */
+        .page-header {
+            padding: 2rem 0 1rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: #f5f5f5;
+        }
+
+        .page-header p {
+            font-size: 0.8rem;
+            color: #777;
+            margin: 0.5rem 0 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Grid Overlay -->
+    <div class="grid-overlay" id="gridOverlay">
+        <div class="grid-overlay-hd-container" id="gridOverlayContainer">
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container-hd">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <h1>Explore Adobe Products</h1>
+                    <p>Product router layout using <code>container-hd</code> · <code>col-lg-4</code>
+                        <code>col-md-6</code> <code>col-sm-6</code></p>
+                    <p style="margin-top: 0.5rem;">
+                        <button onclick="toggleOverlay()"
+                            style="background:#333; color:#ccc; border:1px solid #555; padding:0.35rem 0.75rem; border-radius:6px; font-size:0.7rem; cursor:pointer;">Toggle
+                            Grid Overlay</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Router Grid -->
+    <section style="padding: 1rem 0 3rem;">
+        <div class="container-hd">
+            <div class="row" style="row-gap: 8px;">
+
+                <!-- 1. Firefly -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-firefly">Fi</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Firefly</h3>
+                            <p class="product-card-desc">Create and enhance images, video, and audio with AI-powered
+                                tools.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 2. Adobe Acrobat -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-acrobat">Ac</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Adobe Acrobat</h3>
+                            <p class="product-card-desc">Quickly and easily create, edit, sign, and manage your PDFs
+                                anywhere.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 3. Photoshop (Featured) -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card product-card--featured">
+                        <div class="product-card-bg"
+                            style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600&q=80');">
+                        </div>
+                        <div class="product-icon icon-photoshop">Ps</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Photoshop</h3>
+                            <p class="product-card-desc" style="color:#ccc;">Create gorgeous images, rich graphics, and
+                                incredible art.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 4. Premiere -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-premiere">Pr</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Premiere</h3>
+                            <p class="product-card-desc">Create everything from social clips to feature films with the
+                                leading video editor.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 5. Creative Cloud -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-creative-cloud">CC</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Creative Cloud</h3>
+                            <p class="product-card-desc">Get 20+ apps, including Photoshop, Illustrator, Premiere Pro,
+                                and Acrobat Pro.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 6. GenStudio for Performance Marketing -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-genstudio">A</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">GenStudio for Performance Marketing</h3>
+                            <p class="product-card-desc">Scale your content supply chain.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 7. Business Products -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-business">A</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Business Products</h3>
+                            <p class="product-card-desc">Adobe solutions integrate our best-in-class products to help
+                                you tackle pressing business challenges.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 8. Illustrator -->
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-icon icon-illustrator">Ai</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">Illustrator</h3>
+                            <p class="product-card-desc">Create beautiful designs, icons, and more, then use them
+                                anyplace at any size.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 9. All Products -->
+                <div class="col-lg-4 col-md-12 col-sm-6">
+                    <a href="#" class="product-card">
+                        <div class="product-card-arrow">→</div>
+                        <div class="product-card-body">
+                            <h3 class="product-card-title">All products</h3>
+                            <p class="product-card-desc">See all Adobe products</p>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleOverlay() {
+            document.getElementById('gridOverlay').classList.toggle('active');
+        }
+    </script>
+
+</body>
+
+</html>

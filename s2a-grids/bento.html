@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S2a Modular Bento Grid System</title>
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="grid.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Demo specific overrides */
+        .bento-card h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bento-card p {
+            color: var(--color-text-muted);
+        }
+
+        .class-label {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-size: 0.7rem;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--color-text-muted);
+            pointer-events: none;
+        }
+
+        .bento-card.dark .class-label {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Dynamic Class Labels */
+        .desktop-label {
+            display: none;
+        }
+
+        .mobile-label {
+            display: inline;
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-label {
+                display: none;
+            }
+
+            .desktop-label {
+                display: inline;
+            }
+        }
+
+        /* Adobe Bento Specifics */
+        .adobe-dark {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .adobe-light {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            /* Placeholder for document visual */
+            background-image: radial-gradient(circle at center, #e5e5e5 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+
+        .adobe-blue {
+            background-color: #0f172a;
+            /* darker blue/slate */
+            color: #ffffff;
+            background-image: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .adobe-image {
+            background-color: #fae8ff;
+            /* light purple/pink tint */
+            color: #1a1a1a;
+        }
+
+        .adobe-gray {
+            background-color: #d4d4d8;
+            color: #1a1a1a;
+        }
+
+        .card-content {
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Grid Overlay (Fixed) -->
+    <div class="grid-overlay" id="gridOverlay">
+        <div class="grid-overlay-container" id="gridOverlayContainer">
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="row">
+                <!-- Titles and Notes -->
+                <div class="col-lg-12 col-sm-6" style="margin-bottom: 2rem;">
+                    <h1>S2a Bento Grid System</h1>
+                    <p class="text-muted" style="margin-bottom: 0.5rem; font-size: 1.1rem; line-height: 1.6;">
+                        Modular, dense-packing grid with row spanning.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 1rem; line-height: 1.6;">
+                        <!-- Container One -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <p class="text-muted" style="margin-bottom: 1rem;"><strong>COL container logic
+                                    ranges:</strong> 12 cols (1440+ - 768), 6 cols (up to 768px)</p>
+
+                            <p class="text-muted">
+                                <strong>Container 12 cols (1440+ - 768), 6 cols (up to 768px)</strong>
+                                <br>• Standard: Max 1440px content container.
+                                <br>• HD: Max 1920px content container.
+                                <br>• Hero offset: Max 1920px content container, but margin tokens at breakpoints.
+                                <br>• Fluid: No max content container. (wip) maybe carousel or sliders etc. 2560 max
+                                <br>• No container: Full width/w overflow (wip) flex grid + object-fit etc.
+                            </p>
+                        </div>
+
+                        <!-- Container Two -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <p class="text-muted">
+                                <strong>Margins</strong>
+                                <br>• Hero offset: margin tokens used at breakpoints are: --spacing-4xl, --spacing-2xl,
+                                --spacing-lg.
+                                <br>• Margin rules are based on % inheritance (auto). Desktop/tablet (1440+-768) is
+                                Using 83.4% rules for now.
+                                <br>• Margins on mobile (767-360) we will use a spacing token.--grid-margin =
+                                --spacing-lg
+                            </p>
+
+                            <p class="text-muted" style="margin-top: 1rem;">
+                                <strong>Breakpoints</strong>
+                                <br>• XL 12 cols (1440+ HD) - stress test ie 2560 HD (used only as needed)
+                                <br>• L 12 cols (1440 - 1280) - most standard desktop range
+                                <br>• M 12 cols (1279 - 768) - Tablet landscape (font shift, ability to customize as
+                                needed, mostly “tablet-desktop” feel)
+                                <br>• S 6 cols (up to 767px) - true mobile, but covers tablet portrait as well. Think
+                                mobile simplified layouts or mobile experiences
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Navigation Controls -->
+    <nav
+        style="position: sticky; top: 0; z-index: 1000; background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 0; margin-bottom: 2rem;">
+        <div class="container">
+            <div class="row">
+                <!-- Controls Container -->
+                <div class="col-lg-12 col-sm-6">
+                    <div
+                        style="display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-end; gap: 1.5rem;">
+
+                        <!-- Container Type Controls -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                            <span class="text-sm text-muted"
+                                style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Container</span>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn active" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerType('default', this)">Default</button>
+                                <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerType('hd', this)">HD</button>
+                                <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerType('fluid', this)">Fluid</button>
+                                <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerType('hero-offset', this)">Hero Offset</button>
+                            </div>
+                        </div>
+
+                        <!-- Column Controls -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                            <span class="text-sm text-muted"
+                                style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Desktop
+                                Columns</span>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn active" data-group="columns" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerWidth(12, this)">12 Col</button>
+                                <button class="btn" data-group="columns" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerWidth(10, this)">10 Col</button>
+                                <button class="btn" data-group="columns" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerWidth(8, this)">8 Col</button>
+                                <button class="btn" data-group="columns" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerWidth(6, this)">6 Col</button>
+                            </div>
+                        </div>
+
+                        <!-- Gutter Controls -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                            <span class="text-sm text-muted"
+                                style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Gutter</span>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setGutter(32, this)">32</button>
+                                <button class="btn" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setGutter(16, this)">16</button>
+                                <button class="btn active" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setGutter(8, this)">8</button>
+                                <button class="btn" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setGutter(0, this)">0</button>
+                            </div>
+                        </div>
+
+                        <!-- Overlay Controls -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                            <span class="text-sm text-muted"
+                                style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Guides</span>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn" id="overlayToggleBtn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="toggleOverlay()">Toggle Overlay</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" id="mainContainer">
+
+        <!-- Section 1: Adobe Bento Layout -->
+        <section>
+            <h2 style="margin-bottom: 2rem;">1. Adobe Bento</h2>
+            <p>12x12 grid example, Desktop: 12 cols, 12 rows heights combine to get bento cards.
+                <br>6x6 grid Mobile: 6 cols, 6 rows heights combine to get bento cards.
+            </p>
+            <div class="bento-grid">
+
+                <!-- 1. Content Creation -->
+                <div class="col-lg-3 row-span-lg-3 bento-card adobe-dark col-sm-3 row-span-sm-2">
+                    <div class="card-content">
+                        <h3>Content Creation</h3>
+                        <p>Quickly create and edit images.</p>
+                    </div>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-3</span>
+                        <span class="mobile-label">col-sm-3 row-span-sm-2</span>
+                    </code>
+                </div>
+
+                <!-- 2. Documents -->
+                <div class="col-lg-3 row-span-lg-3 bento-card adobe-light col-sm-3 row-span-sm-2">
+                    <div class="card-content">
+                        <h3>Documents & Productivity</h3>
+                    </div>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-3</span>
+                        <span class="mobile-label">col-sm-3 row-span-sm-2</span>
+                    </code>
+                </div>
+
+                <!-- 3. Professional Creative -->
+                <div class="col-lg-6 row-span-lg-3 bento-card adobe-blue col-sm-3 row-span-sm-2">
+                    <div class="card-content">
+                        <h3>Professional Creative</h3>
+                    </div>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-6 row-span-lg-3</span>
+                        <span class="mobile-label">col-sm-3 row-span-sm-2</span>
+                    </code>
+                </div>
+
+                <!-- 4. Marketing & Commerce -->
+                <div class="col-lg-6 row-span-lg-3 bento-card adobe-image col-sm-3 row-span-sm-2">
+                    <div class="card-content">
+                        <h3>Marketing & Commerce</h3>
+                    </div>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-6 row-span-lg-3</span>
+                        <span class="mobile-label">col-sm-3 row-span-sm-2</span>
+                    </code>
+                </div>
+
+                <!-- 5. Students & Teachers -->
+                <div class="col-lg-6 row-span-lg-3 bento-card adobe-gray col-sm-6 row-span-sm-2">
+                    <div class="card-content">
+                        <h3>Students & Teachers</h3>
+                    </div>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-6 row-span-lg-3</span>
+                        <span class="mobile-label">col-sm-6 row-span-sm-2</span>
+                    </code>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Section 2: Hero Bento Layout -->
+        <section>
+            <h2 style="margin-bottom: 2rem;">2. Hero Layout</h2>
+            <!-- 
+                Bento Grid Wrapper 
+                Default: 4 cols
+                Tablet: 8 cols
+                Desktop: 12 cols
+            -->
+            <div class="bento-grid">
+
+                <!-- Main Feature: Spans 4 cols on mobile, 4 on tablet, 6 on desktop. 4 Rows tall. -->
+                <div class="col-lg-6 row-span-lg-4 bento-card dark col-sm-full row-span-sm-4">
+                    <h2>Bento</h2>
+                    <p>Central Feature Area</p>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-6 row-span-lg-4</span>
+                        <span class="mobile-label">col-sm-full row-span-sm-4</span>
+                    </code>
+                </div>
+
+                <!-- Secondary Feature: Vertical on mobile, Square on desktop -->
+                <div class="col-lg-3 row-span-lg-2 bento-card highlight col-sm-6 row-span-sm-3">
+                    <h3>Vertical</h3>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-2</span>
+                        <span class="mobile-label">col-sm-6 row-span-sm-3</span>
+                    </code>
+                </div>
+
+                <!-- Module Title -->
+                <div class="col-lg-3 row-span-lg-1 bento-card col-sm-5 row-span-sm-3">
+                    <h3>Round</h3>
+                    <p>Corners</p>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-1</span>
+                        <span class="mobile-label">col-sm-5 row-span-sm-3</span>
+                    </code>
+                </div>
+
+                <!-- Number Module -->
+                <div class="col-lg-3 row-span-lg-1 bento-card col-sm-4 row-span-sm-2">
+                    <h3>123</h3>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-1</span>
+                        <span class="mobile-label">col-sm-4 row-span-sm-2</span>
+                    </code>
+                </div>
+
+                <!-- Small Circles / List -->
+                <div class="col-lg-3 row-span-lg-2 bento-card col-sm-3 row-span-sm-2">
+                    <div style="display: flex; gap: 8px; flex-direction: column;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #ddd;"></div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #ddd;"></div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #ddd;"></div>
+                    </div>
+                    <code class="class-label" style="margin-top: auto;">
+                        <span class="desktop-label">col-lg-3 row-span-lg-2</span>
+                        <span class="mobile-label">col-sm-3 row-span-sm-2</span>
+                    </code>
+                </div>
+
+
+                <!-- Wide Bottom Module -->
+                <div class="col-lg-3 row-span-lg-1 bento-card col-sm-6 row-span-sm-2">
+                    <h2>AaBbCc</h2>
+                    <p>Typography Scale</p>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-1</span>
+                        <span class="mobile-label">col-sm-6 row-span-sm-2</span>
+                    </code>
+                </div>
+
+                <!-- Time Module -->
+                <div class="col-lg-3 row-span-lg-1 bento-card col-sm-6 row-span-sm-3">
+                    <h2>9:16</h2>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-3 row-span-lg-1</span>
+                        <span class="mobile-label">col-sm-6 row-span-sm-3</span>
+                    </code>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 3: Breakpoint Layouts -->
+        <section>
+            <h2 style="margin-bottom: 2rem;">3. Breakpoint Layouts</h2>
+            <p style="margin-bottom: 2rem;">Demonstrating how elements can adapt their proportions differently across
+                desktop, tablet, and mobile breakpoints.
+            </p>
+            <div class="bento-grid">
+                <!-- Example A -->
+                <div
+                    class="col-lg-8 row-span-lg-3 col-md-6 row-span-md-2 col-sm-full row-span-sm-4 bento-card highlight">
+                    <h3>Example A: Feature Hero</h3>
+                    <p style="margin-bottom: 1rem; color: var(--color-text-muted);">Adapts from a large hero card
+                        (Desktop), to a full-width banner (Tablet), to a tall vertical card (Mobile).</p>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-8 row-span-lg-3</span>
+                        <span class="mobile-label" style="display:block; margin: 4px 0;">col-md-6 row-span-md-2</span>
+                        <span class="mobile-label">col-sm-full row-span-sm-4</span>
+                    </code>
+                </div>
+
+                <!-- Example B -->
+                <div class="col-lg-4 row-span-lg-3 col-md-6 row-span-md-2 col-sm-full row-span-sm-2 bento-card"
+                    style="background: #fdf2f8;">
+                    <h3>Example B: Sidebar Promo</h3>
+                    <p style="margin-bottom: 1rem; color: var(--color-text-muted);">Stands beside Example A (Desktop),
+                        drops below and takes half width (Tablet), then full width stacking (Mobile).</p>
+                    <code class="class-label">
+                        <span class="desktop-label">col-lg-4 row-span-lg-3</span>
+                        <span class="mobile-label" style="display:block; margin: 4px 0;">col-md-6 row-span-md-2</span>
+                        <span class="mobile-label">col-sm-full row-span-sm-2</span>
+                    </code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Column Tokens Reference -->
+        <section>
+            <h2>4. Column Tokens Reference</h2>
+            <p>Comprehensive list of all available column span and alignment tokens.</p>
+
+            <style>
+                .token-stack {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.5rem;
+                }
+
+                .token-category {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+                    background: var(--color-bg);
+                    border: 1px solid var(--color-border);
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                }
+
+                .token-category h3 {
+                    font-size: 1.125rem;
+                    margin: 0;
+                    color: var(--color-text);
+                    font-weight: 600;
+                }
+
+                .token-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                    gap: 0.5rem;
+                }
+
+                .token-item {
+                    border: 1px dashed var(--color-border);
+                    background: var(--color-surface);
+                    padding: 0.5rem 0.25rem;
+                    border-radius: 6px;
+                    font-family: monospace;
+                    font-size: 0.85rem;
+                    color: var(--color-text-muted);
+                    text-align: center;
+                    transition: all 0.2s;
+                }
+
+                .token-item:hover {
+                    border-color: var(--color-primary);
+                    color: var(--color-primary);
+                    background: #eff6ff;
+                }
+            </style>
+
+            <div class="token-stack">
+                <div class="token-category">
+                    <h3>Mobile (1-6 cols)</h3>
+                    <div class="token-grid">
+                        <div class="token-item">.col-sm-1</div>
+                        <div class="token-item">.col-sm-2</div>
+                        <div class="token-item">.col-sm-3</div>
+                        <div class="token-item">.col-sm-4</div>
+                        <div class="token-item">.col-sm-5</div>
+                        <div class="token-item">.col-sm-6</div>
+                        <div class="token-item">.col-sm-full</div>
+                    </div>
+                </div>
+
+                <div class="token-category">
+                    <h3>Tablet & Desktop (1-12 cols at 768px+)</h3>
+                    <p style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:0.5rem;">.col-md- overrides
+                        .col-lg- on tablet. Otherwise Tablet inherits .col-lg-.</p>
+
+                    <h4 style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--color-text);">Desktop Classes
+                        (.col-lg-*)</h4>
+                    <div class="token-grid">
+                        <div class="token-item">.col-lg-1</div>
+                        <div class="token-item">.col-lg-2</div>
+                        <div class="token-item">.col-lg-3</div>
+                        <div class="token-item">.col-lg-4</div>
+                        <div class="token-item">.col-lg-5</div>
+                        <div class="token-item">.col-lg-6</div>
+                        <div class="token-item">.col-lg-7</div>
+                        <div class="token-item">.col-lg-8</div>
+                        <div class="token-item">.col-lg-9</div>
+                        <div class="token-item">.col-lg-10</div>
+                        <div class="token-item">.col-lg-11</div>
+                        <div class="token-item">.col-lg-12</div>
+                        <div class="token-item">.col-lg-full</div>
+                    </div>
+
+                    <h4 style="font-size: 0.9rem; margin: 1rem 0 0.5rem 0; color: var(--color-text);">Tablet Overrides
+                        (.col-md-*) If not used we defualt to lg tokens instead.</h4>
+                    <div class="token-grid">
+                        <div class="token-item">.col-md-1</div>
+                        <div class="token-item">.col-md-2</div>
+                        <div class="token-item">.col-md-3</div>
+                        <div class="token-item">.col-md-4</div>
+                        <div class="token-item">.col-md-5</div>
+                        <div class="token-item">.col-md-6</div>
+                        <div class="token-item">.col-md-7</div>
+                        <div class="token-item">.col-md-8</div>
+                        <div class="token-item">.col-md-9</div>
+                        <div class="token-item">.col-md-10</div>
+                        <div class="token-item">.col-md-11</div>
+                        <div class="token-item">.col-md-12</div>
+                        <div class="token-item">.col-md-full</div>
+                    </div>
+                </div>
+
+                <div class="token-category">
+                    <h3>Row Spans</h3>
+                    <h4 style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--color-text);">Mobile Classes
+                        (.row-span-sm-*)</h4>
+                    <div class="token-grid">
+                        <div class="token-item">.row-span-sm-1</div>
+                        <div class="token-item">.row-span-sm-2</div>
+                        <div class="token-item">.row-span-sm-3</div>
+                        <div class="token-item">.row-span-sm-4</div>
+                        <div class="token-item">.row-span-sm-5</div>
+                        <div class="token-item">.row-span-sm-6</div>
+                        <div class="token-item">.row-span-sm-7</div>
+                        <div class="token-item">.row-span-sm-8</div>
+                        <div class="token-item">.row-span-sm-9</div>
+                        <div class="token-item">.row-span-sm-10</div>
+                        <div class="token-item">.row-span-sm-11</div>
+                        <div class="token-item">.row-span-sm-12</div>
+                        <div class="token-item">.row-span-sm-full</div>
+                    </div>
+
+                    <h4 style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--color-text);">Desktop Classes
+                        (.row-span-lg-*)</h4>
+                    <div class="token-grid">
+                        <div class="token-item">.row-span-lg-1</div>
+                        <div class="token-item">.row-span-lg-2</div>
+                        <div class="token-item">.row-span-lg-3</div>
+                        <div class="token-item">.row-span-lg-4</div>
+                        <div class="token-item">.row-span-lg-5</div>
+                        <div class="token-item">.row-span-lg-6</div>
+                        <div class="token-item">.row-span-lg-7</div>
+                        <div class="token-item">.row-span-lg-8</div>
+                        <div class="token-item">.row-span-lg-9</div>
+                        <div class="token-item">.row-span-lg-10</div>
+                        <div class="token-item">.row-span-lg-11</div>
+                        <div class="token-item">.row-span-lg-12</div>
+                        <div class="token-item">.row-span-lg-full</div>
+                    </div>
+
+                    <h4 style="font-size: 0.9rem; margin: 1rem 0 0.5rem 0; color: var(--color-text);">Tablet Overrides
+                        (.row-span-md-*)</h4>
+                    <div class="token-grid">
+                        <div class="token-item">.row-span-md-1</div>
+                        <div class="token-item">.row-span-md-2</div>
+                        <div class="token-item">.row-span-md-3</div>
+                        <div class="token-item">.row-span-md-4</div>
+                        <div class="token-item">.row-span-md-5</div>
+                        <div class="token-item">.row-span-md-6</div>
+                        <div class="token-item">.row-span-md-7</div>
+                        <div class="token-item">.row-span-md-8</div>
+                        <div class="token-item">.row-span-md-9</div>
+                        <div class="token-item">.row-span-md-10</div>
+                        <div class="token-item">.row-span-md-11</div>
+                        <div class="token-item">.row-span-md-12</div>
+                        <div class="token-item">.row-span-md-full</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: System Outline -->
+        <section>
+            <h2 style="margin-bottom: 2rem;">5. System Outline</h2>
+            <p style="margin-bottom: 2rem;">Visualizing grid capabilities: Row spans 1-12 and Columns 1-12.
+                <br>Desktop: 12 cols, 12 rows heights combine to get bento cards. Values are col-lg-# and row-span-#.
+                <br>Mobile: 6 cols, 6 rows heights combine to get bento cards. Values are col-sm-# and row-span-sm-#.
+            </p>
+
+            <h3 style="margin-bottom: 1rem;">Row Spans (1-12)</h3>
+            <div class="bento-grid" style="margin-bottom: 4rem;">
+                <!-- Row Spans Display -->
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-1">
+                    <h3>1</h3>
+                    <code class="class-label">row-span-lg-1</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-2">
+                    <h3>2</h3>
+                    <code class="class-label">row-span-lg-2</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-3">
+                    <h3>3</h3>
+                    <code class="class-label">row-span-lg-3</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-4">
+                    <h3>4</h3>
+                    <code class="class-label">row-span-lg-4</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-5">
+                    <h3>5</h3>
+                    <code class="class-label">row-span-lg-5</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-6">
+                    <h3>6</h3>
+                    <code class="class-label">row-span-lg-6</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-7">
+                    <h3>7</h3>
+                    <code class="class-label">row-span-lg-7</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-8">
+                    <h3>8</h3>
+                    <code class="class-label">row-span-lg-8</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-9">
+                    <h3>9</h3>
+                    <code class="class-label">row-span-lg-9</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-10">
+                    <h3>10</h3>
+                    <code class="class-label">row-span-lg-10</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-11">
+                    <h3>11</h3>
+                    <code class="class-label">row-span-lg-11</code>
+                </div>
+                <div class="bento-card outline col-lg-1 col-sm-2 row-span-lg-12">
+                    <h3>12</h3>
+                    <code class="class-label">row-span-lg-12</code>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Column Spans (1-12)</h3>
+            <div class="bento-grid">
+                <!-- Column Spans Display -->
+                <div class="bento-card outline col-lg-1 row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-1</code>
+                </div>
+                <div class="bento-card outline col-lg-2 row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-2</code>
+                </div>
+                <div class="bento-card outline col-lg-3 row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-3</code>
+                </div>
+                <div class="bento-card outline col-lg-4 row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-4</code>
+                </div>
+                <div class="bento-card outline col-lg-5 row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-5</code>
+                </div>
+                <div class="bento-card outline col-lg-6 row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-6</code>
+                </div>
+                <div class="bento-card outline col-lg-7 col-sm-full row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-7</code>
+                </div>
+                <div class="bento-card outline col-lg-8 col-sm-full row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-8</code>
+                </div>
+                <div class="bento-card outline col-lg-9 col-sm-full row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-9</code>
+                </div>
+                <div class="bento-card outline col-lg-10 col-sm-full row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-10</code>
+                </div>
+                <div class="bento-card outline col-lg-11 col-sm-full row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-11</code>
+                </div>
+                <div class="bento-card outline col-lg-12 col-sm-full row-span-lg-1" style="grid-column-start: 1;">
+                    <code>col-lg-12</code>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Active state helper — removes .active from siblings in the same data-group
+        function setActiveBtn(btn) {
+            if (!btn) return;
+            const group = btn.getAttribute('data-group');
+            if (group) {
+                document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+            }
+            btn.classList.add('active');
+        }
+
+        function toggleOverlay() {
+            const overlay = document.getElementById('gridOverlay');
+            overlay.classList.toggle('active');
+            document.getElementById('overlayToggleBtn').classList.toggle('active');
+        }
+
+        function setContainerWidth(cols, btn) {
+            setActiveBtn(btn);
+            const container = document.getElementById('mainContainer');
+            const overlayContainer = document.getElementById('gridOverlayContainer');
+            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hero-offset'];
+
+            container.classList.remove(...classesToRemove);
+            overlayContainer.classList.remove(...classesToRemove);
+
+            if (cols) {
+                container.classList.add(`container-${cols}`);
+                overlayContainer.classList.add(`container-${cols}`);
+            }
+        }
+
+        function setContainerType(type, btn) {
+            setActiveBtn(btn);
+            const container = document.getElementById('mainContainer');
+            const overlayContainer = document.getElementById('gridOverlayContainer');
+            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-hd-container', 'grid-overlay-hero-offset-container'];
+            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hero-offset'];
+
+            container.classList.remove(...classesToRemove);
+            overlayContainer.classList.remove(...classesToRemove);
+            overlayContainer.classList.remove(...overlayBaseClasses);
+
+            if (type === 'fluid') {
+                container.classList.add('container-fluid');
+                overlayContainer.classList.add('grid-overlay-container');
+            } else if (type === 'hero-offset') {
+                container.classList.add('container-hero-offset');
+                overlayContainer.classList.add('grid-overlay-hero-offset-container');
+            } else if (type === 'hd') {
+                container.classList.add('container-hd');
+                overlayContainer.classList.add('grid-overlay-hd-container');
+            } else {
+                overlayContainer.classList.add('grid-overlay-container');
+            }
+        }
+
+        function setGutter(size, btn) {
+            setActiveBtn(btn);
+            const target = document.body;
+            target.classList.remove('gutter-32', 'gutter-16', 'gutter-8', 'gutter-0');
+            target.classList.add(`gutter-${size}`);
+        }
+
+        // Initialize overlay visible for demo
+        toggleOverlay();
+    </script>
+</body>
+
+</html>

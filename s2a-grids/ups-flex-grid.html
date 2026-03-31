@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPS Flex Grid</title>
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="grid.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ups-grid.css">
+</head>
+
+<body class="gutter-8">
+
+    <!-- Grid Overlay (Fixed) -->
+    <div class="grid-overlay" id="gridOverlay">
+        <div class="grid-overlay-container" id="gridOverlayContainer">
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+            <div class="grid-overlay-col"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1>UPS Flex Grid</h1>
+            <div class="row" style="line-height: 1.6;">
+
+                <!-- Col 1: Grid Behavior -->
+                <div class="col-lg-4 col-sm-6">
+                    <p class=”text-muted”>
+                        <strong>Grid Behavior</strong><br>
+                        • Desktop (≥1280px): 2–6 cards per row via <code>.two-up</code> through
+                        <code>.six-up</code>.<br>
+                        • Tablet (768–1279px): Always 2-up. Add <code>.orphan-full</code> to stretch a lone last card
+                        full width.<br>
+                        • Mobile (&lt;768px): Single column, fully stacked.
+                    </p>
+                    <p class=”text-muted”>
+                        <strong>Usage</strong><br>
+                        <code>&lt;div class=”ups-grid three-up”&gt;</code><br>
+                        <code>&lt;div class=”ups-grid four-up orphan-full”&gt;</code>
+                    </p>
+                </div>
+
+                <!-- Col 2: Containers -->
+                <div class="col-lg-4 col-sm-6">
+                    <p class="text-muted">
+                        <strong>Containers</strong><br>
+                        • Standard: max 1440px content area.<br>
+                        • HD: max 1920px content area.<br>
+                        • Hero offset: max 1920px, margin tokens at breakpoints.<br>
+                        • Fluid: no max width (wip — carousels, sliders).<br>
+                        • No container: full width with overflow (wip).
+                    </p>
+                    <p class=”text-muted”>
+                        <strong>Columns</strong><br>
+                        • 12 cols: 1440+ down to 768px.<br>
+                        • 6 cols: below 768px.
+                    </p>
+                </div>
+
+                <!-- Col 3: Margins & Breakpoints -->
+                <div class="col-lg-4 col-sm-6">
+                    <p class="text-muted">
+                        <strong>Margins</strong><br>
+                        • Hero offset tokens: <code>--spacing-4xl</code>, <code>--spacing-2xl</code>,
+                        <code>--spacing-lg</code>.<br>
+                        • Desktop/tablet: 83.4% auto margins.<br>
+                        • Mobile (767–360): <code>--spacing-lg</code> token.
+                    </p>
+                    <p class=”text-muted”>
+                        <strong>Breakpoints</strong><br>
+                        • XL (1440+ HD): stress test up to 2560.<br>
+                        • L (1440–1280): standard desktop.<br>
+                        • M (1279–768): tablet landscape.<br>
+                        • S (&lt;767px): mobile / tablet portrait.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Navigation Controls -->
+    <nav
+        style="position: sticky; top: 0; z-index: 1000; background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 0; margin-bottom: 2rem;">
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-end; gap: 1.5rem;">
+
+                <!-- Container Type -->
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Container</span>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="btn active" data-group="container"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setContainerType('default', this)">Default</button>
+                        <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setContainerType('hd', this)">HD</button>
+                        <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setContainerType('fluid', this)">Fluid</button>
+                        <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setContainerType('hero-offset', this)">Hero Offset</button>
+                    </div>
+                </div>
+
+                <!-- Ups -->
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Ups</span>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="btn" data-group="ups" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setUps('two', this)">2</button>
+                        <button class="btn" data-group="ups" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setUps('three', this)">3</button>
+                        <button class="btn" data-group="ups" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setUps('four', this)">4</button>
+                        <button class="btn" data-group="ups" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setUps('five', this)">5</button>
+                        <button class="btn" data-group="ups" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setUps('six', this)">6</button>
+                    </div>
+                </div>
+
+                <!-- Orphan -->
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Orphan</span>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="btn" id="orphanBtn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="toggleOrphan(this)">Full Width</button>
+                    </div>
+                </div>
+
+                <!-- Gutter -->
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Gutter</span>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="btn" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setGutter(32, this)">32</button>
+                        <button class="btn" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setGutter(16, this)">16</button>
+                        <button class="btn active" data-group="gutter"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="setGutter(8, this)">8</button>
+                        <button class="btn" data-group="gutter" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="setGutter(0, this)">0</button>
+                    </div>
+                </div>
+
+                <!-- Guides -->
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted);">Guides</span>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="btn" id="overlayToggleBtn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                            onclick="toggleOverlay()">Toggle Overlay</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" id="mainContainer">
+
+        <!-- 2-up: 5 cards → 1 orphan on tablet -->
+        <section>
+            <h2 style="margin-bottom: 1rem;">2-up</h2>
+            <div class="ups-grid two-up" id="grid-two-up">
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3-up: 7 cards → 1 orphan on tablet -->
+        <section>
+            <h2 style="margin-bottom: 1rem;">3-up</h2>
+            <div class="ups-grid three-up" id="grid-three-up">
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4-up: 9 cards → 1 orphan on tablet -->
+        <section>
+            <h2 style="margin-bottom: 1rem;">4-up</h2>
+            <div class="ups-grid four-up" id="grid-four-up">
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5-up: 11 cards → 1 orphan on tablet -->
+        <section>
+            <h2 style="margin-bottom: 1rem;">5-up</h2>
+            <div class="ups-grid five-up" id="grid-five-up">
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6-up: 11 cards → 1 orphan on tablet -->
+        <section>
+            <h2 style="margin-bottom: 1rem;">6-up</h2>
+            <div class="ups-grid six-up" id="grid-six-up">
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+                <div class="ups-card">
+                    <div class="ups-card-media"></div>
+                    <div class="ups-card-body">
+                        <p class="ups-card-eyebrow">Category</p>
+                        <h3 class="ups-card-title">Card headline goes here</h3>
+                        <p class="ups-card-body-text">Supporting body copy provides context for the card content above.
+                        </p><a class="ups-card-cta" href="#">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Class Reference -->
+        <section>
+            <h2>Class Reference</h2>
+            <style>
+                .ref-table {
+                    border-collapse: collapse;
+                    width: 100%;
+                    font-size: 0.875rem;
+                }
+
+                .ref-table th,
+                .ref-table td {
+                    border: 1px solid var(--color-border);
+                    padding: 0.5rem 0.75rem;
+                    text-align: left;
+                }
+
+                .ref-table th {
+                    background: var(--color-surface);
+                    font-weight: 600;
+                }
+
+                .ref-table code {
+                    font-family: monospace;
+                }
+            </style>
+            <table class="ref-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Desktop</th>
+                        <th>Tablet</th>
+                        <th>Mobile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>.ups-grid.two-up</code></td>
+                        <td>2 col fr</td>
+                        <td>2 col fr</td>
+                        <td>1 col</td>
+                    </tr>
+                    <tr>
+                        <td><code>.ups-grid.three-up</code></td>
+                        <td>3 col fr</td>
+                        <td>2 col fr</td>
+                        <td>1 col</td>
+                    </tr>
+                    <tr>
+                        <td><code>.ups-grid.four-up</code></td>
+                        <td>4 col fr</td>
+                        <td>2 col fr</td>
+                        <td>1 col</td>
+                    </tr>
+                    <tr>
+                        <td><code>.ups-grid.five-up</code></td>
+                        <td>5 col fr</td>
+                        <td>2 col fr</td>
+                        <td>1 col</td>
+                    </tr>
+                    <tr>
+                        <td><code>.ups-grid.six-up</code></td>
+                        <td>6 col fr</td>
+                        <td>2 col fr</td>
+                        <td>1 col</td>
+                    </tr>
+                    <tr>
+                        <td><code>+ .orphan-full</code></td>
+                        <td>no effect</td>
+                        <td>last odd child → full width</td>
+                        <td>no effect</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script>
+        const UP_CLASSES = ['two-up', 'three-up', 'four-up', 'five-up', 'six-up'];
+        const allGrids = () => document.querySelectorAll('.ups-grid');
+
+        function setActiveBtn(btn) {
+            if (!btn) return;
+            const group = btn.getAttribute('data-group');
+            if (group) {
+                document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+            }
+            btn.classList.add('active');
+        }
+
+        function toggleOverlay() {
+            document.getElementById('gridOverlay').classList.toggle('active');
+            document.getElementById('overlayToggleBtn').classList.toggle('active');
+        }
+
+        function setContainerType(type, btn) {
+            setActiveBtn(btn);
+            const container = document.getElementById('mainContainer');
+            const overlayContainer = document.getElementById('gridOverlayContainer');
+            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-hd-container', 'grid-overlay-hero-offset-container'];
+            const classesToRemove = ['container-fluid', 'container-hd', 'container-hero-offset'];
+
+            container.classList.remove(...classesToRemove);
+            overlayContainer.classList.remove(...classesToRemove);
+            overlayContainer.classList.remove(...overlayBaseClasses);
+
+            if (type === 'fluid') {
+                container.classList.add('container-fluid');
+                overlayContainer.classList.add('grid-overlay-container');
+            } else if (type === 'hero-offset') {
+                container.classList.add('container-hero-offset');
+                overlayContainer.classList.add('grid-overlay-hero-offset-container');
+            } else if (type === 'hd') {
+                container.classList.add('container-hd');
+                overlayContainer.classList.add('grid-overlay-hd-container');
+            } else {
+                overlayContainer.classList.add('grid-overlay-container');
+            }
+        }
+
+        function setGutter(size, btn) {
+            setActiveBtn(btn);
+            document.body.classList.remove('gutter-32', 'gutter-16', 'gutter-8', 'gutter-0');
+            document.body.classList.add(`gutter-${size}`);
+        }
+
+        function setUps(name, btn) {
+            // Toggle off if already active → restore each grid's default
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                allGrids().forEach(grid => {
+                    grid.classList.remove(...UP_CLASSES);
+                    grid.classList.add(grid.dataset.defaultUp);
+                });
+                return;
+            }
+            setActiveBtn(btn);
+            allGrids().forEach(grid => {
+                grid.classList.remove(...UP_CLASSES);
+                grid.classList.add(`${name}-up`);
+            });
+        }
+
+        function toggleOrphan(btn) {
+            btn.classList.toggle('active');
+            allGrids().forEach(grid => grid.classList.toggle('orphan-full'));
+        }
+
+        // Store each grid's original up class so we can restore on toggle-off
+        allGrids().forEach(grid => {
+            grid.dataset.defaultUp = UP_CLASSES.find(c => grid.classList.contains(c)) || 'three-up';
+        });
+
+        // Init: overlay on, gutter-8 already on body via class attribute
+        toggleOverlay();
+    </script>
+</body>
+
+</html>
