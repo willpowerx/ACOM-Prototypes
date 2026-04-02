@@ -1,7 +1,7 @@
 /* =========================================
    S2a Grid System
    Pure grid mechanics — no visual styling.
-   Requires tokens.css for spacing variables.
+   Requires s2a-tokens.css for spacing variables.
    ========================================= */
 
 /* --- Grid System Configuration --- */
@@ -21,7 +21,7 @@
 @media (min-width: 768px) {
     :root {
         --s2a-grid-columns: 12;
-        --s2a-grid-gutter: 8px;
+        --s2a-grid-gutter:  var(--spacing-xs);
         --s2a-grid-container-width: 83.4%;
         --s2a-grid-max-width: 1440px;
     }
