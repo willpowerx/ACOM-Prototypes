@@ -1,4 +1,6 @@
 {
   "version": 2,
-  "builds": [{ "src": "index.html", "use": "@vercel/static" }]
+  "framework": null,
+  "buildCommand": "cd character-generator && npm install && npm run build && cd ../frame-motion-tool && npm install && npm run build",
+  "outputDirectory": "."
 }
