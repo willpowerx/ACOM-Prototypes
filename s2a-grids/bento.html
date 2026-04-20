@@ -187,6 +187,8 @@
                                 <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                                     onclick="setContainerType('hd', this)">HD</button>
                                 <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
+                                    onclick="setContainerType('hd-offset', this)">HD Offset</button>
+                                <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                                     onclick="setContainerType('fluid', this)">Fluid</button>
                                 <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                                     onclick="setContainerType('hero-offset', this)">Hero Offset</button>
@@ -727,7 +729,7 @@
             setActiveBtn(btn);
             const container = document.getElementById('mainContainer');
             const overlayContainer = document.getElementById('gridOverlayContainer');
-            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hero-offset'];
+            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hd-offset', 'container-hero-offset'];
 
             container.classList.remove(...classesToRemove);
             overlayContainer.classList.remove(...classesToRemove);
@@ -742,8 +744,8 @@
             setActiveBtn(btn);
             const container = document.getElementById('mainContainer');
             const overlayContainer = document.getElementById('gridOverlayContainer');
-            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-hd-container', 'grid-overlay-hero-offset-container'];
-            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hero-offset'];
+            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-hd-container', 'grid-overlay-hd-offset-container', 'grid-overlay-hero-offset-container'];
+            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hd-offset', 'container-hero-offset'];
 
             container.classList.remove(...classesToRemove);
             overlayContainer.classList.remove(...classesToRemove);
@@ -758,6 +760,9 @@
             } else if (type === 'hd') {
                 container.classList.add('container-hd');
                 overlayContainer.classList.add('grid-overlay-hd-container');
+            } else if (type === 'hd-offset') {
+                container.classList.add('container-hd-offset');
+                overlayContainer.classList.add('grid-overlay-hd-offset-container');
             } else {
                 overlayContainer.classList.add('grid-overlay-container');
             }

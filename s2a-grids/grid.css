@@ -91,6 +91,16 @@
     }
 }
 
+/* HD Offset Container — fixed 24px padding across all breakpoints */
+.container-hd-offset {
+    width: 100%;
+    max-width: var(--s2a-grid-hd-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+}
+
 /* Hero offset container */
 .container-hero-offset {
     width: 100%;
@@ -853,6 +863,18 @@
         padding-left: 0;
         padding-right: 0;
     }
+}
+
+.grid-overlay-hd-offset-container {
+    width: 100%;
+    height: 100%;
+    max-width: var(--s2a-grid-hd-max-width);
+    margin: 0 auto;
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: repeat(var(--s2a-grid-columns), 1fr);
+    gap: var(--s2a-grid-gutter);
 }
 
 .grid-overlay-hero-offset-container {
