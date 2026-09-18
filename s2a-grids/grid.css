@@ -19,10 +19,15 @@
     /* Overlay Colors (grid-specific) */
     --color-overlay: rgba(255, 107, 107, 0.1);
     --color-overlay-col: rgba(255, 107, 107, 0.08);
+
+    /* Token Offset Container — per-breakpoint margin tokens (widget-controlled) */
+    --s2a-token-offset-sm: var(--spacing-lg);
+    --s2a-token-offset-md: var(--spacing-2xl);
+    --s2a-token-offset-lg: var(--spacing-4xl);
 }
 
 /* Tablet & Desktop (>= 768px) */
-@media (min-width: 768px) {
+@media (width >= 768px) {
     :root {
         --s2a-grid-columns: 12;
         --s2a-grid-gutter: 8px;
@@ -46,19 +51,15 @@
     position: relative;
 }
 
-/* desktop 1440+ — standard container is full 12-col (1440px) */
-@media screen and (min-width: 1440px) {
+/* XL 1441+ — standard container is full 12-col (1920px HD) */
+@media screen and (width >= 1441px) {
 
     .container {
-        max-width: 1440px;
-    }
-
-    .container-hd {
         max-width: var(--s2a-grid-hd-max-width);
     }
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
     .container {
         width: var(--s2a-grid-container-width);
         padding-left: 0;
@@ -73,24 +74,6 @@
     --s2a-grid-container-width: 100%;
 }
 
-/* HD Container — mobile-first: padding-based, then width-based at 768+ */
-.container-hd {
-    width: 100%;
-    max-width: var(--s2a-grid-hd-max-width);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--spacing-lg);
-    padding-right: var(--spacing-lg);
-}
-
-@media (min-width: 768px) {
-    .container-hd {
-        width: var(--s2a-grid-container-width);
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-
 /* HD Offset Container — fixed 24px padding across all breakpoints */
 .container-hd-offset {
     width: 100%;
@@ -101,31 +84,31 @@
     padding-right: var(--spacing-lg);
 }
 
-/* Hero offset container */
-.container-hero-offset {
+/* Token Offset Container — margins driven by per-breakpoint spacing token vars */
+.container-token-offset {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: var(--spacing-lg);
-    padding-right: var(--spacing-lg);
+    padding-left: var(--s2a-token-offset-sm);
+    padding-right: var(--s2a-token-offset-sm);
 }
 
-@media (min-width: 768px) {
-    .container-hero-offset {
-        padding-left: var(--spacing-2xl);
-        padding-right: var(--spacing-2xl);
+@media (width >= 768px) {
+    .container-token-offset {
+        padding-left: var(--s2a-token-offset-md);
+        padding-right: var(--s2a-token-offset-md);
     }
 }
 
-@media (min-width: 1280px) {
-    .container-hero-offset {
-        padding-left: var(--spacing-4xl);
-        padding-right: var(--spacing-4xl);
+@media (width >= 1280px) {
+    .container-token-offset {
+        padding-left: var(--s2a-token-offset-lg);
+        padding-right: var(--s2a-token-offset-lg);
     }
 }
 
-@media (min-width: 1440px) {
-    .container-hero-offset {
+@media (width >= 1441px) {
+    .container-token-offset {
         width: var(--s2a-grid-container-width);
         max-width: var(--s2a-grid-hd-max-width);
         padding-left: 0;
@@ -247,7 +230,7 @@
 /* =========================================
    Column Spans — Tablet (768px+) & Desktop (1280px+)
    ========================================= */
-@media (min-width: 768px) {
+@media (width >= 768px) {
 
     /* Tablet & Desktop Base: .col-lg-* sets the layout */
     .col-lg-1 {
@@ -453,7 +436,7 @@
 }
 
 /* --- Desktop (1280px+) --- */
-@media (min-width: 1280px) {
+@media (width >= 1280px) {
 
     /* Desktop overrides: .col-lg-* overrides .col-md-* on desktop */
     .col-lg-1 {
@@ -647,7 +630,7 @@
 }
 
 /* Tablet & Desktop Row Spans */
-@media (min-width: 768px) {
+@media (width >= 768px) {
     .row-span-lg-1 {
         grid-row: span 1;
     }
@@ -753,7 +736,7 @@
     }
 }
 
-@media (min-width: 1280px) {
+@media (width >= 1280px) {
     .row-span-lg-1 {
         grid-row: span 1;
     }
@@ -837,7 +820,7 @@
     gap: var(--s2a-grid-gutter);
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
     .grid-overlay-container {
         width: var(--s2a-grid-container-width);
         padding-left: 0;
@@ -845,23 +828,9 @@
     }
 }
 
-.grid-overlay-hd-container {
-    width: 100%;
-    height: 100%;
-    max-width: var(--s2a-grid-hd-max-width);
-    margin: 0 auto;
-    padding-left: var(--spacing-lg);
-    padding-right: var(--spacing-lg);
-    display: grid;
-    grid-template-columns: repeat(var(--s2a-grid-columns), 1fr);
-    gap: var(--s2a-grid-gutter);
-}
-
-@media (min-width: 768px) {
-    .grid-overlay-hd-container {
-        width: var(--s2a-grid-container-width);
-        padding-left: 0;
-        padding-right: 0;
+@media screen and (width >= 1441px) {
+    .grid-overlay-container {
+        max-width: var(--s2a-grid-hd-max-width);
     }
 }
 
@@ -877,34 +846,34 @@
     gap: var(--s2a-grid-gutter);
 }
 
-.grid-overlay-hero-offset-container {
+.grid-overlay-token-offset-container {
     width: 100%;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: var(--spacing-lg);
-    padding-right: var(--spacing-lg);
+    padding-left: var(--s2a-token-offset-sm);
+    padding-right: var(--s2a-token-offset-sm);
     display: grid;
     grid-template-columns: repeat(var(--s2a-grid-columns), 1fr);
     gap: var(--s2a-grid-gutter);
 }
 
-@media (min-width: 768px) {
-    .grid-overlay-hero-offset-container {
-        padding-left: var(--spacing-2xl);
-        padding-right: var(--spacing-2xl);
+@media (width >= 768px) {
+    .grid-overlay-token-offset-container {
+        padding-left: var(--s2a-token-offset-md);
+        padding-right: var(--s2a-token-offset-md);
     }
 }
 
-@media (min-width: 1280px) {
-    .grid-overlay-hero-offset-container {
-        padding-left: var(--spacing-4xl);
-        padding-right: var(--spacing-4xl);
+@media (width >= 1280px) {
+    .grid-overlay-token-offset-container {
+        padding-left: var(--s2a-token-offset-lg);
+        padding-right: var(--s2a-token-offset-lg);
     }
 }
 
-@media (min-width: 1440px) {
-    .grid-overlay-hero-offset-container {
+@media (width >= 1441px) {
+    .grid-overlay-token-offset-container {
         width: var(--s2a-grid-container-width);
         max-width: var(--s2a-grid-hd-max-width);
         padding-left: 0;
@@ -925,7 +894,7 @@
     display: none;
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
 
     /* Tablet & Desktop (12 cols) -> show all */
     .grid-overlay-col:nth-child(n+7) {

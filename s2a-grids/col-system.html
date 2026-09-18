@@ -41,15 +41,14 @@
                         <!-- Container One -->
                         <div style="flex: 1; min-width: 300px;">
                             <p class="text-muted" style="margin-bottom: 1rem;"><strong>COL container logic
-                                    ranges:</strong> 12 cols (1440+ - 768), 6 cols (up to 768px)</p>
+                                    ranges:</strong> 12 cols (768px and up), 6 cols (below 768px) — mobile-first, no-query default with <code>width >=</code> range media queries above it.</p>
 
                             <p class="text-muted">
-                                <strong>Container 12 cols (1440+ - 768), 6 cols (up to 768px)</strong>
-                                <br>• Standard: Max 1440px content container.
-                                <br>• HD: Max 1920px content container.
-                                <br>• Hero offset: Max 1920px content container, but margin tokens at breakpoints.
+                                <strong>Container Types</strong>
+                                <br>• Standard: Max 1920px content container (HD width is now the default; the separate HD toggle has been retired).
+                                <br>• Token offset: Max 1920px content container, margins driven by a spacing token per breakpoint (see the Margin Tokens widget below).
                                 <br>• Fluid: No max content container. (wip) maybe carousel or sliders etc. 2560 max
-                                <br>• No container: Full width/w overflow (wip) flex grid + object-fit etc.
+                                <br>• Container Overflow: allowed to go beyond the viewport, flex grid + object-fit etc.
                             </p>
                         </div>
 
@@ -57,22 +56,17 @@
                         <div style="flex: 1; min-width: 300px;">
                             <p class="text-muted">
                                 <strong>Margins</strong>
-                                <br>• Hero offset: margin tokens used at breakpoints are: --spacing-4xl, --spacing-2xl,
-                                --spacing-lg.
-                                <br>• Margin rules are based on % inheritance (auto). Desktop/tablet (1440+-768) is
-                                Using 83.4% rules for now.
-                                <br>• Margins on mobile (767-360) we will use a spacing token.--grid-margin =
-                                --spacing-lg
+                                <br>• Standard/HD containers: 83.4% width margins apply MD and up (≥768px); SM (below 768px) uses a fixed --spacing-lg padding.
+                                <br>• Token offset: padding-based margins per breakpoint, defaulting to --spacing-lg / --spacing-2xl / --spacing-4xl for SM / MD / LG, then switching to the 83.4% width rule at XL (≥1441px) — adjustable live via the Margin Tokens widget.
                             </p>
 
                             <p class="text-muted" style="margin-top: 1rem;">
                                 <strong>Breakpoints</strong>
-                                <br>• XL 12 cols (1440+ HD) - stress test ie 2560 HD (used only as needed)
-                                <br>• L 12 cols (1440 - 1280) - most standard desktop range
-                                <br>• M 12 cols (1279 - 768) - Tablet landscape (font shift, ability to customize as
-                                needed, mostly “tablet-desktop” feel)
-                                <br>• S 6 cols (up to 767px) - true mobile, but covers tablet portrait as well. Think
-                                mobile simplified layouts or mobile experiences
+                                <br>• SM — no media query (mobile-first default, below 768px): 6 cols. True mobile, but also covers tablet portrait.
+                                <br>• MD — <code>@media (width >= 768px)</code>: 12 cols. Tablet landscape range.
+                                <br>• LG — <code>@media (width >= 1280px)</code>: 12 cols. Standard desktop range.
+                                <br>• XL — <code>@media (width >= 1441px)</code>: 12 cols. HD/stress-test desktop range (up to 2560, used only as needed).
+                                <br>Current tier is shown live by the Breakpoint indicator in the sticky nav below.
                             </p>
                         </div>
                     </div>
@@ -88,6 +82,13 @@
         <div class="container">
             <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-end; gap: 1.5rem;">
 
+                <!-- Breakpoint Indicator -->
+                <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto;">
+                    <span class="text-sm text-muted"
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Breakpoint</span>
+                    <span id="breakpointIndicator" class="btn active" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; cursor: default;"></span>
+                </div>
+
                 <!-- Container Type Controls -->
                 <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
                     <span class="text-sm text-muted"
@@ -96,11 +97,32 @@
                         <button class="btn active" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                             onclick="setContainerType('default', this)">Default</button>
                         <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
-                            onclick="setContainerType('hd', this)">HD</button>
-                        <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                             onclick="setContainerType('fluid', this)">Fluid</button>
                         <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
-                            onclick="setContainerType('hero-offset', this)">Hero Offset</button>
+                            onclick="setContainerType('token-offset', this)">Token Offset</button>
+                    </div>
+                </div>
+
+                <!-- Margin Token Controls (only relevant when Token Offset is active) -->
+                <div id="tokenOffsetControls" style="display: none; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span class="text-sm text-muted"
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Margin Tokens</span>
+                    <div style="display: flex; gap: 8px;">
+                        <label style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                            <span style="font-size: 0.65rem; color: var(--color-text-muted);">SM</span>
+                            <select class="btn" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;"
+                                onchange="setTokenOffset('sm', this.value)"></select>
+                        </label>
+                        <label style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                            <span style="font-size: 0.65rem; color: var(--color-text-muted);">MD</span>
+                            <select class="btn" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;"
+                                onchange="setTokenOffset('md', this.value)"></select>
+                        </label>
+                        <label style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                            <span style="font-size: 0.65rem; color: var(--color-text-muted);">LG</span>
+                            <select class="btn" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;"
+                                onchange="setTokenOffset('lg', this.value)"></select>
+                        </label>
                     </div>
                 </div>
 
@@ -662,8 +684,7 @@
                     <div class="token-grid">
                         <div class="token-item">.container</div>
                         <div class="token-item">.container-fluid</div>
-                        <div class="token-item">.container-hero-offset</div>
-                        <div class="token-item">.container-hd</div>
+                        <div class="token-item">.container-token-offset</div>
                     </div>
                 </div>
 
@@ -702,7 +723,7 @@
             setActiveBtn(btn);
             const container = document.getElementById('mainContainer');
             const overlayContainer = document.getElementById('gridOverlayContainer');
-            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hero-offset'];
+            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-token-offset'];
 
             container.classList.remove(...classesToRemove);
             overlayContainer.classList.remove(...classesToRemove);
@@ -717,8 +738,8 @@
             setActiveBtn(btn);
             const container = document.getElementById('mainContainer');
             const overlayContainer = document.getElementById('gridOverlayContainer');
-            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-hd-container', 'grid-overlay-hero-offset-container'];
-            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-hd', 'container-hero-offset'];
+            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-token-offset-container'];
+            const classesToRemove = ['container-12', 'container-10', 'container-8', 'container-6', 'container-fluid', 'container-token-offset'];
 
             container.classList.remove(...classesToRemove);
             overlayContainer.classList.remove(...classesToRemove);
@@ -727,15 +748,14 @@
             if (type === 'fluid') {
                 container.classList.add('container-fluid');
                 overlayContainer.classList.add('grid-overlay-container');
-            } else if (type === 'hero-offset') {
-                container.classList.add('container-hero-offset');
-                overlayContainer.classList.add('grid-overlay-hero-offset-container');
-            } else if (type === 'hd') {
-                container.classList.add('container-hd');
-                overlayContainer.classList.add('grid-overlay-hd-container');
+            } else if (type === 'token-offset') {
+                container.classList.add('container-token-offset');
+                overlayContainer.classList.add('grid-overlay-token-offset-container');
             } else {
                 overlayContainer.classList.add('grid-overlay-container');
             }
+
+            document.getElementById('tokenOffsetControls').style.display = (type === 'token-offset') ? 'flex' : 'none';
         }
 
         function setGutter(size, btn) {
@@ -745,8 +765,39 @@
             target.classList.add(`gutter-${size}`);
         }
 
+        // Spacing tokens available to the Margin Tokens widget, with each tier's current default
+        const SPACING_TOKENS = ['none', '3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
+        const TOKEN_OFFSET_DEFAULTS = { sm: 'lg', md: '2xl', lg: '4xl' };
+
+        function setTokenOffset(tier, token) {
+            document.documentElement.style.setProperty(`--s2a-token-offset-${tier}`, `var(--spacing-${token})`);
+        }
+
+        function initTokenOffsetWidget() {
+            document.querySelectorAll('#tokenOffsetControls select').forEach(select => {
+                const tier = select.getAttribute('onchange').match(/setTokenOffset\('(\w+)'/)[1];
+                select.innerHTML = SPACING_TOKENS.map(t => `<option value="${t}">${t}</option>`).join('');
+                select.value = TOKEN_OFFSET_DEFAULTS[tier];
+            });
+        }
+
+        // Breakpoint Indicator — mirrors the SM/MD/LG/XL thresholds defined in grid.css
+        function updateBreakpointIndicator() {
+            const el = document.getElementById('breakpointIndicator');
+            const w = window.innerWidth;
+            let label;
+            if (w >= 1441) label = 'XL · Desktop HD (≥1441)';
+            else if (w >= 1280) label = 'LG · Desktop (≥1280)';
+            else if (w >= 768) label = 'MD · Tablet (≥768)';
+            else label = 'SM · Mobile (<768)';
+            el.textContent = label;
+        }
+        window.addEventListener('resize', updateBreakpointIndicator);
+
         // Initialize overlay visible for demo
         toggleOverlay();
+        initTokenOffsetWidget();
+        updateBreakpointIndicator();
     </script>
 </body>
 

@@ -59,7 +59,7 @@
                         <strong>Containers</strong><br>
                         • Standard: max 1440px content area.<br>
                         • HD: max 1920px content area.<br>
-                        • Hero offset: max 1920px, margin tokens at breakpoints.<br>
+                        • Token offset: max 1920px, margin tokens at breakpoints.<br>
                         • Fluid: no max width (wip — carousels, sliders).<br>
                         • No container: full width with overflow (wip).
                     </p>
@@ -74,7 +74,7 @@
                 <div class="col-lg-4 col-sm-6">
                     <p class="text-muted">
                         <strong>Margins</strong><br>
-                        • Hero offset tokens: <code>--spacing-4xl</code>, <code>--spacing-2xl</code>,
+                        • Token offset tokens: <code>--spacing-4xl</code>, <code>--spacing-2xl</code>,
                         <code>--spacing-lg</code>.<br>
                         • Desktop/tablet: 83.4% auto margins.<br>
                         • Mobile (767–360): <code>--spacing-lg</code> token.
@@ -107,11 +107,9 @@
                             style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                             onclick="setContainerType('default', this)">Default</button>
                         <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
-                            onclick="setContainerType('hd', this)">HD</button>
-                        <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
                             onclick="setContainerType('fluid', this)">Fluid</button>
                         <button class="btn" data-group="container" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;"
-                            onclick="setContainerType('hero-offset', this)">Hero Offset</button>
+                            onclick="setContainerType('token-offset', this)">Token Offset</button>
                     </div>
                 </div>
 
@@ -697,8 +695,8 @@
             setActiveBtn(btn);
             const container = document.getElementById('mainContainer');
             const overlayContainer = document.getElementById('gridOverlayContainer');
-            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-hd-container', 'grid-overlay-hero-offset-container'];
-            const classesToRemove = ['container-fluid', 'container-hd', 'container-hero-offset'];
+            const overlayBaseClasses = ['grid-overlay-container', 'grid-overlay-token-offset-container'];
+            const classesToRemove = ['container-fluid', 'container-token-offset'];
 
             container.classList.remove(...classesToRemove);
             overlayContainer.classList.remove(...classesToRemove);
@@ -707,12 +705,9 @@
             if (type === 'fluid') {
                 container.classList.add('container-fluid');
                 overlayContainer.classList.add('grid-overlay-container');
-            } else if (type === 'hero-offset') {
-                container.classList.add('container-hero-offset');
-                overlayContainer.classList.add('grid-overlay-hero-offset-container');
-            } else if (type === 'hd') {
-                container.classList.add('container-hd');
-                overlayContainer.classList.add('grid-overlay-hd-container');
+            } else if (type === 'token-offset') {
+                container.classList.add('container-token-offset');
+                overlayContainer.classList.add('grid-overlay-token-offset-container');
             } else {
                 overlayContainer.classList.add('grid-overlay-container');
             }
